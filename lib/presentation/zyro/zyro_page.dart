@@ -78,7 +78,7 @@ class _ZyroPageState extends State<ZyroPage> {
       ),
 
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,34 +174,37 @@ class _ZyroPageState extends State<ZyroPage> {
               const SizedBox(height: 12),
 
               // EMI LIST
-              Expanded(
-                child: isLoading
-                    ? const Center(
+              isLoading
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40),
+                      child: Center(
                         child: CircularProgressIndicator(color: neonCyan),
-                      )
-                    : activeEmis.isEmpty
-                    ? const Center(
+                      ),
+                    )
+                  : activeEmis.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40),
+                      child: Center(
                         child: Text(
                           'No EMIs for this month',
                           style: TextStyle(color: Colors.white38, fontSize: 15),
                         ),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        itemCount: activeEmis.length,
-                        itemBuilder: (context, index) {
-                          final emi = activeEmis[index];
-
-                          return _EmiCard(
-                            name: emi.name,
-                            amount: _amountForMonth(emi, selectedMonth),
-                            accentColor: _emiAccentColor(index),
-                            onEdit: () => _editEmi(emi),
-                            onDelete: () => _deleteEmi(emi),
-                          );
-                        },
                       ),
-              ),
+                    )
+                  : Column(
+                      children: activeEmis.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final emi = entry.value;
+
+                        return _EmiCard(
+                          name: emi.name,
+                          amount: _amountForMonth(emi, selectedMonth),
+                          accentColor: _emiAccentColor(index),
+                          onEdit: () => _editEmi(emi),
+                          onDelete: () => _deleteEmi(emi),
+                        );
+                      }).toList(),
+                    ),
 
               const SizedBox(height: 12),
 
