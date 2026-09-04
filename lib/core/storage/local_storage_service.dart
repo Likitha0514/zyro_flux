@@ -36,4 +36,12 @@ class LocalStorageService {
       flush: true,
     );
   }
+
+  Future<void> clearData() async {
+  final file = await _getFile();
+
+  if (await file.exists()) {
+    await file.delete();
+  }
+}
 }

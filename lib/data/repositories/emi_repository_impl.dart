@@ -14,11 +14,7 @@ class EmiRepositoryImpl implements EmiRepository {
     final emis = data['emis'] as List? ?? [];
 
     return emis
-        .map(
-          (emi) => EmiModel.fromJson(
-            Map<String, dynamic>.from(emi),
-          ),
-        )
+        .map((emi) => EmiModel.fromJson(Map<String, dynamic>.from(emi)))
         .toList();
   }
 
@@ -41,9 +37,7 @@ class EmiRepositoryImpl implements EmiRepository {
 
     final emis = data['emis'] as List? ?? [];
 
-    final index = emis.indexWhere(
-      (item) => item['id'] == emi.id,
-    );
+    final index = emis.indexWhere((item) => item['id'] == emi.id);
 
     if (index == -1) return;
 
@@ -60,11 +54,18 @@ class EmiRepositoryImpl implements EmiRepository {
 
     final emis = data['emis'] as List? ?? [];
 
-    emis.removeWhere(
-      (item) => item['id'] == id,
-    );
+    emis.removeWhere((item) => item['id'] == id);
 
     data['emis'] = emis;
+
+    await localStorage.writeData(data);
+  }
+
+  @override
+  Future<void> clearEmis() async {
+    final data = await localStorage.readData();
+
+    data['emis'] = [];
 
     await localStorage.writeData(data);
   }

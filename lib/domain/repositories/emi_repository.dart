@@ -8,4 +8,6 @@ abstract class EmiRepository {
   Future<void> updateEmi(EmiModel emi);
 
   Future<void> deleteEmi(String id);
+
+  Future<void> clearEmis();
 }
